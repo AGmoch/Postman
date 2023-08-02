@@ -1,0 +1,601 @@
+{
+	"info": {
+		"_postman_id": "64e43766-2921-492d-9fb1-35792043c183",
+		"name": "Jira Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26526717"
+	},
+	"item": [
+		{
+			"name": "Create filtr",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.environment.set(\"filtername\", \"nowyFilter\" + pm.variables.replaceIn('{{$timestamp}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.description).to.eql(\"Lists all open bugs by Postman\");\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.contain(\"nowyFilter\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{filtername}}\",\r\n    \"description\": \"Lists all open bugs by Postman\",\r\n    \"jql\": \"project = TES AND issuetype = Bug order by created DESC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create filtr with the same name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"pm.test(\"checkError\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors['filterName']).to.eql(\"Filtr o takiej samej nazwie już istnieje.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"ALL Open bugs\",\r\n    \"description\": \"Lists all open bugs by Postman\",\r\n    \"jql\": \"project = TES AND issuetype = Bug order by created DESC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updatefilter",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"checkName\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql('All Open Bugs');\r",
+							"});\r",
+							"pm.test(\"checkName\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.description).to.contain('bugs');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter/10001",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter",
+						"10001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit filter 10001",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"filternameAfterUpdate\", \"UpdatedFilter\" + pm.variables.replaceIn('{{$timestamp}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.description).to.eql(\"Lists all open bugs by Postman\");\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.contain(\"UpdatedFilter\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{filternameAfterUpdate}}\",\r\n    \"description\": \"Lists all open bugs by Postman\",\r\n    \"jql\": \"project = TES AND issuetype = Bug order by created DESC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter/10001",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter",
+						"10001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete filter witch does not exist",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"pm.test(\"checkError\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errorMessages[0]).to.eql(\"Filtr obecnie nie istnieje.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter/1",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get filter that not exist",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"pm.test(\"check errorMessages\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errorMessages[0]).to.eql('Wybrany filtr nie jest dostępny; prawdopodobnie został usunięty lub jego uprawnienia uległy zmianie.');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter/1",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create filtr for delete",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.environment.set(\"filternameToDelete\", \"filterToDelete\" + pm.variables.replaceIn('{{$timestamp}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.description).to.eql(\"Lists all open bugs by Postman\");\r",
+							"});\r",
+							"pm.test(\"checkDescription\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.contain(\"filterToDelete\");\r",
+							"});\r",
+							"pm.globals.set(\"IDtoDelete\", pm.response.json().id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{filternameToDelete}}\",\r\n    \"description\": \"Lists all open bugs by Postman\",\r\n    \"jql\": \"project = TES AND issuetype = Bug order by created DESC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete filter",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "artur.gmoch@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ATATT3xFfGF0HJwJN89EzfmlPR07Zh3qwKLc_WTIVpRdj_iBR0p5vouwD6eGmoI4uZAI78CJQkPLK6u_Cr5XcyB5ICF6-gm739v1-H6AcAmKkYzF59-L9smWRfxI_FTg7VIHoG_X-FTIXhZdAXV1SLlcdoKtEBtxWX-8Yudwc9IXCVkRxNZhQnI=87E72D5D",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://arturgmoch.atlassian.net/rest/api/2/filter/{{IDtoDelete}}",
+					"protocol": "https",
+					"host": [
+						"arturgmoch",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"filter",
+						"{{IDtoDelete}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
